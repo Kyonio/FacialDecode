@@ -97,7 +97,10 @@ class FacialDataset(Dataset):
     
     def __init__(self,root_dir,cell_dict,transform=None):
         #super(FacialDataset,self).__init__()
+        
+        
         self.data_files = os.listdir(root_dir)
+        self.data_files.sort(key= lambda x: float(x.strip('.png')))
         self.root_dir = root_dir
         self.transform = transform
         self.cell_dict = cell_dict
@@ -112,6 +115,7 @@ class FacialDataset(Dataset):
         if self.transform:
             sample = self.transform(sample)
         sample['cell'] = cell_acti
+        #sample['label'] = self.data_files[idx]
         return sample
 
     def __len__(self):
@@ -163,7 +167,7 @@ def split_dataset(dataset,test_size=0.8,shuffle=False,random_seed=0):
 
 
 def facial_dataset():
-    dset = FacialDataset(root_dir='/home/ubuntu/wkhan/VAE/dataset/processed_img/',
+    dset = FacialDataset(root_dir='/home/ubuntu/wkhan/VAE/dataset/new_2k_face/',
                         cell_dict=CellActi('/home/ubuntu/wkhan/VAE/dataset/population_response/'),
                         transform = transforms.Compose([
                          Rescale((64,64)),
